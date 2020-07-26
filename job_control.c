@@ -24,14 +24,17 @@ Some code adapted from "Fundamentos de Sistemas Operativos", Silberschatz et al.
 //  null-terminated string.
 // -----------------------------------------------------------------------
 
-void get_command(char inputBuffer[], int size, char *args[],int *background)
+void get_command(char inputBuffer[], int size, char *args[], int *background)
 {
+
 	int length, /* # of characters in the command line */
 		i,      /* loop index for accessing inputBuffer array */
 		start,  /* index where beginning of next command parameter is */
 		ct;     /* index of where to place the next parameter into args[] */
-
 	ct = 0;
+
+	printf("HOLAAAAAAAAAA\n");
+
 	*background=0;
 
 	/* read what the user enters on the command line */
@@ -40,7 +43,6 @@ void get_command(char inputBuffer[], int size, char *args[],int *background)
 	start = -1;
 	if (length == 0)
 	{
-		printf("\nBye\n");
 		exit(0);            /* ^d was entered, end of user command stream */
 	}
 	if (length < 0){
