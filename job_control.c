@@ -33,8 +33,6 @@ void get_command(char inputBuffer[], int size, char *args[], int *background)
 		ct;     /* index of where to place the next parameter into args[] */
 	ct = 0;
 
-	printf("HOLAAAAAAAAAA\n");
-
 	*background=0;
 
 	/* read what the user enters on the command line */

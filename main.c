@@ -5,9 +5,9 @@
 
 int main(int argc, char **argv)
 {
-	Shell *shell;
-	Shell_Construct(shell);
+	Shell *shell = Shell_Construct();
 	Shell_Run(shell);
 
+	Shell_Destruct(&shell);
 	return EXIT_SUCCESS;
 }

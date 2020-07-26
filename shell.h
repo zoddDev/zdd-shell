@@ -16,19 +16,18 @@ struct Shell
 	int background;             /* equals 1 if a command is followed by '&' */
 	char *args[MAX_LINE/2];     /* command line (of 256) has max of 128 arguments */
 	
-	// probably useful variables:
-	pid_t pid_fork; /* pid for created and waited process */
-	int *status;             /* status returned by wait */
-	enum status status_res; /* status processed by analyze_status() */
-	int info;				/* info processed by analyze_status() */
-	char *homedir;
+	pid_t pid_fork; 			/* pid for created and waited process */
+	int status;             	/* status returned by wait */
+	enum status status_res; 	/* status processed by analyze_status() */
+	int info;					/* info processed by analyze_status() */
+	char homedir[64];
 
     job *jobList; // Background jobs list
 
     int log;
 };
 
-void Shell_Construct(Shell *shell);
+Shell *Shell_Construct();
 
 void Shell_Run(Shell *shell);
 
@@ -47,3 +46,5 @@ void Shell_PrintPrompt(Shell *shell);
 void Shell_EnableLog(Shell *shell);
 
 void Shell_DisableLog(Shell *shell);
+
+void Shell_Destruct(Shell **shell);
