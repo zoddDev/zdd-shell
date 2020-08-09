@@ -171,15 +171,23 @@ void print_item(job * item)
 /*recorre la lista y le aplica la funcion pintar a cada elemento */
 void print_list(job * list, void (*print)(job *))
 {
-	int n=1;
-	job * aux=list;
-	printf("Contents of %s:\n",list->command);
-	while(aux->next!= NULL)
+	if (list != NULL && list->next == NULL)
 	{
-		printf(" [%d] ",n);
-		print(aux->next);
-		n++;
-		aux=aux->next;
+		printf("jobs: there are no jobs\n");
+	}
+	else
+	{
+		int n=1;
+		job * aux=list;
+		printf("jobs:\n",list->command);
+	
+		while(aux->next!= NULL)
+		{
+			printf(" [%d] ",n);
+			print(aux->next);
+			n++;
+			aux=aux->next;
+		}
 	}
 }
 

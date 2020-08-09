@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "job_control.h"
 #include "shell.h"
-#include "prompt/prompt.h"
 
 Shell *ptrShell;
 
@@ -16,13 +14,12 @@ Shell *Shell_Construct()
 	shell->background = 0;
 
     shell->jobList = NULL;
-    shell->jobList = new_job(0, "jobs", BACKGROUND);
+    // shell->jobList = new_job(0, "jobs", BACKGROUND);
+	shell->jobList = new_list("jobs");
 	shell->jobList->next = NULL;
 
 	strcpy(shell->homedir, "/home/");
 	strcat(shell->homedir, getlogin());
-
-	// printf("%s\n", shell->homedir);
 
 	ignore_terminal_signals();
 
@@ -89,67 +86,39 @@ void Shell_Run(Shell *shell)
 
 int Shell_InternalCommand(Shell *shell)
 {
-    if(shell->args[0]==NULL) return 1;   // if empty command
+	int isInternalCommand = 1;
 
-    if(!strcmp(shell->args[0], "exit"))
+    if(shell->args[0] == NULL) 
+	{
+		// empty command
+	}
+    else if(!strcmp(shell->args[0], "exit"))
     {
-        exit(0);
+		INTERNAL_EXIT(shell);
     }
     else if(!strcmp(shell->args[0], "cd"))
     {
-        char *dir = shell->args[1] == NULL || !strcmp(shell->args[1], "~") ? shell->homedir : shell->args[1];
-        if(chdir(dir)) printf("\033[1;31m<ERROR> directory \"%s\" does not exist\n", dir);
-        return 1;
+		INTERNAL_CD(shell);
     }
     else if(!strcmp(shell->args[0], "jobs")) 
     {
-        block_SIGCHLD();
-        printf("\033[1;36m");
-
-        print_job_list(shell->jobList);
-        
-        printf("\033[0;0m");
-        unblock_SIGCHLD();
-        return 1;
+        INTERNAL_JOBS(shell);
     }
     else if(!strcmp(shell->args[0], "fg"))
     {
-        block_SIGCHLD();
-
-        int index = shell->args[1] == NULL ? 1 : atoi(shell->args[1]);
-
-        job *j = Shell_GetJob(shell, index);
-        if(j != NULL) 
-        {
-            printf("<INFO> Sending job %d to foreground...\n", index);
-            set_terminal(j->pgid);
-            // j->state = FOREGROUND;
-            killpg(j->pgid, SIGCONT);
-            Shell_DefaultWait(shell, j->pgid, j->command);
-            delete_job(shell->jobList, j);
-        } else printf("\033[1;31m<ERROR> job [%d] does not exist\n", index);
-
-        unblock_SIGCHLD();
-        return 1;
+        INTERNAL_FG(shell);
     } 
     else if(!strcmp(shell->args[0], "bg")) 
     {
-        block_SIGCHLD();
-        int index = shell->args[1] == NULL ? 1 : atoi(shell->args[1]);
-        job *j = Shell_GetJob(shell, index);
-        if(j != NULL) 
-        {
-            printf("<INFO> Resuming job \"%s\"...\n", j->command);
-            j->state = BACKGROUND;
-            killpg(j->pgid, SIGCONT);
-        } else printf("\033[1;31m<ERROR> job [%d] does not exist\n", index);
-
-        unblock_SIGCHLD();
-        return 1;
-    }
+        INTERNAL_BG(shell);
+    } 
+	else 
+	{
+		isInternalCommand = 0;
+	}
 
     // No internal command
-    return 0;
+    return isInternalCommand;
 }
 
 void Shell_SigchldHandler(int signal)
