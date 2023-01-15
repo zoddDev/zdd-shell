@@ -2,6 +2,8 @@
 
 ## Compile project
 
-`gcc -o zdd main.c shell.c job_control.c ./internal_commands/internal_commands.c ./colors/colors.c ./prompt/prompt.c`
+```
+gcc -o zdd main.c shell.c job_control.c ./internal_commands/internal_commands.c ./colors/colors.c ./prompt/prompt.c
+```
 
 ##### Or execute `./build.sh`
