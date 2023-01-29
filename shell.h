@@ -17,27 +17,25 @@
 
 #define ERROR_COLOR RED_BOLD /* default color for error output */
 
-
 // ------------------------------------ Shell struct ------------------------------------
 
 typedef struct Shell Shell;
 struct Shell
 {
 	char inputBuffer[MAX_LINE]; /* buffer to hold the command entered */
-	int background;             /* equals 1 if a command is followed by '&' */
-	char *args[MAX_LINE/2];     /* command line (of 256) has max of 128 arguments */
-	
-	pid_t pid_fork; 			/* pid for created and waited process */
-	int status;             	/* status returned by wait */
-	enum status status_res; 	/* status processed by analyze_status() */
-	int info;					/* info processed by analyze_status() */
-	char homedir[64];
+	int background;				/* equals 1 if a command is followed by '&' */
+	char *args[MAX_LINE / 2];	/* command line (of 256) has max of 128 arguments */
 
-    job *jobList; 				/* Background jobs list */
+	pid_t pid_fork;			/* pid for created and waited process */
+	int status;				/* status returned by wait */
+	enum status status_res; /* status processed by analyze_status() */
+	int info;				/* info processed by analyze_status() */
+	char homedir[128];
 
-    int log;					/* if equals 1, exit messages are printed */
+	job *jobList; /* Background jobs list */
+
+	int log; /* if equals 1, exit messages are printed */
 };
-
 
 // ------------------------------------- FUNCTIONS -------------------------------------
 
@@ -49,7 +47,7 @@ int Shell_InternalCommand(Shell *shell); // checks if given command corresponds 
 
 void Shell_SigchldHandler(int signal); // handles process signals
 
-job *Shell_GetJob(Shell *shell, int index); // returns job from jobList given a specific index 
+job *Shell_GetJob(Shell *shell, int index); // returns job from jobList given a specific index
 
 void Shell_DefaultWait(Shell *shell, pid_t pid, const char *command); // waits for a specific PID to be finished
 

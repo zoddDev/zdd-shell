@@ -8,6 +8,6 @@
 
 void Prompt_Print();
 
-char* Prompt_PWD();
+char *Prompt_PWD();
 
-char* Prompt_FancyPWD();
+char *Prompt_FancyPWD();

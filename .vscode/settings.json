@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "exception": "c",
+    "shell.h": "c",
+    "stdlib.h": "c",
+    "pwd.h": "c",
+    "prompt.h": "c",
+    "utils.h": "c",
+    "limits": "c",
+    "internal_commands.h": "c",
+    "stdio.h": "c",
+    "colors.h": "c"
+  }
+}

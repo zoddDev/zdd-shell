@@ -1,0 +1,1 @@
+struct passwd *Utils_GetCurrentUser();

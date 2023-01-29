@@ -1,20 +1,24 @@
+#include <pwd.h>
+
+#include "../utils/utils.h"
 #include "prompt.h"
 
 void Prompt_Print()
 {
+
     Colors_SetColor(BLUE);
     printf("%s ", Prompt_FancyPWD());
 
     Colors_SetColor(RED_BOLD);
-	printf("❯");
-	Colors_SetColor(YELLOW_BOLD);
-	printf("❯");
-	Colors_SetColor(GREEN_BOLD);
-	printf("❯ ");
+    printf("❯");
+    Colors_SetColor(YELLOW_BOLD);
+    printf("❯");
+    Colors_SetColor(GREEN_BOLD);
+    printf("❯ ");
     Colors_SetColor(RESET);
 }
 
-char* Prompt_PWD()
+char *Prompt_PWD()
 {
     char pwd[4096];
     getcwd(pwd, sizeof(pwd));
@@ -22,14 +26,16 @@ char* Prompt_PWD()
     return ptr;
 }
 
-char* Prompt_FancyPWD()
+char *Prompt_FancyPWD()
 {
-    int username_length = strlen(getlogin());
+    const char *username = Utils_GetCurrentUser()->pw_name;
+
+    int username_length = strlen(username);
     const int home_length = strlen("/home/") + username_length;
 
     char HOME_DIR[home_length + 1];
     strcpy(HOME_DIR, "/home/");
-    strcat(HOME_DIR, getlogin());
+    strcat(HOME_DIR, username);
     HOME_DIR[home_length] = '\0';
 
     char *pwd = Prompt_PWD();
@@ -39,7 +45,7 @@ char* Prompt_FancyPWD()
         char firstCharacters[home_length + 1];
         strncpy(firstCharacters, pwd, home_length);
         firstCharacters[home_length] = '\0';
-        
+
         if (!strcmp(firstCharacters, HOME_DIR))
         {
             char pwd_fancy[4096];
